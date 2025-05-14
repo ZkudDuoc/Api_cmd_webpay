@@ -18,6 +18,7 @@ def cmf_data():
 
 @bp.route('/payment', methods=['POST'])
 def payment():
+    urlbueno = "https://webpay3gint.transbank.cl/webpayserver/initTransaction?token_ws="
     try:
         current_app.logger.info("Iniciando proceso de pago")
         
@@ -39,9 +40,10 @@ def payment():
 
         current_app.logger.info("Respuesta de WebPay recibida correctamente")
         current_app.logger.info(f"URL de redirección: {response['url']}")
-        current_app.logger.info(f"Token: {response['token']}")
-
-        return redirect(response['url'])
+        current_app.logger.info(f"Token: {urlbueno + (response['token'])}")
+        urlbueno += (response['token'])
+        
+        return redirect(urlbueno)
         
     except Exception as e:
         current_app.logger.error(f"Error en proceso de pago: {str(e)}", exc_info=True)
